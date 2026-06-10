@@ -485,26 +485,48 @@ body {
   background: var(--bg-card);
 }
 .figma-embed-header {
-  display: flex; align-items: center; gap: 16px;
-  padding: 20px 24px;
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 24px;
   border-bottom: 1px solid var(--border);
   background: var(--bg-alt);
+  flex-wrap: wrap;
 }
-.figma-embed-header i { font-size: 2rem; color: var(--accent); }
-.figma-embed-header h3 { font-size: 1rem; font-weight: 600; margin-bottom: 2px; }
-.figma-embed-header p { font-size: 0.82rem; color: var(--text-secondary); }
-
-.figma-iframe-container {
+.figma-embed-header i { font-size: 1.6rem; color: var(--accent); }
+.figma-embed-header h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; }
+.figma-embed-header p  { font-size: 0.78rem; color: var(--text-secondary); }
+ 
+/* Phone frame layout */
+.figma-phone-wrap {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 40px 32px;
+}
+ 
+.figma-phone-frame {
+  flex-shrink: 0;
+  width: 240px;
+  height: 480px;
+  border-radius: 36px;
+  border: 8px solid var(--border);
+  background: #000;
+  box-shadow: 0 0 0 2px var(--accent), 0 24px 48px rgba(0,0,0,0.5), 0 0 40px var(--accent-glow);
   position: relative;
-  padding-bottom: 56.25%;
-  height: 0;
   overflow: hidden;
 }
-.figma-iframe-container iframe {
-  position: absolute; top: 0; left: 0;
+.figma-phone-notch {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  width: 60px; height: 10px;
+  background: var(--border);
+  border-radius: 999px;
+  z-index: 2;
+}
+.figma-phone-frame iframe {
   width: 100%; height: 100%;
   border: none;
+  border-radius: 28px;
 }
+ 
 
 /* ── SKILLS ── */
 .skills-grid {
