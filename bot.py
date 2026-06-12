@@ -1,365 +1,67 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sona Singh BK — Web Developer</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-</head>
-<body>
 
-  <!-- ── NAVBAR ── -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-logo">
-      <span class="logo-bracket">&lt;</span>Sona <span class="logo-accent">Singh</span><span class="logo-bracket">/&gt;</span>
-    </div>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#projects" class="nav-link">Projects</a></li>
-      <li><a href="#skills" class="nav-link">Skills</a></li>
-      <li><a href="#blog" class="nav-link">Blog</a></li>
-      <li><a href="#contact" class="nav-link">Contact</a></li>
-    </ul>
-    <div class="nav-right">
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-        <span class="theme-icon" id="themeIcon">☀️</span>
-      </button>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
+# Pulse - Daily Summary Bot
+# Fetches: weather (wttr.in) + a quote (zenquotes.to)
+import requests
+from datetime import date
 
-  <!-- ── HERO ── -->
-  <section class="hero" id="home">
-    <div class="hero-bg-grid"></div>
-    <div class="hero-content">
-      <p class="hero-eyebrow"><span class="dot"></span> Available for opportunities</p>
-      <h1 class="hero-title">
-        Hi, I'm <span class="highlight">Sona Singh BK</span>
-      </h1>
-      <p class="hero-role">
-        <span class="fira">&lt;</span>
-        <span class="typed-text" id="typedText"></span>
-        <span class="cursor">|</span>
-        <span class="fira">/&gt;</span>
-      </p>
-      <p class="hero-bio">
-        B.Tech Computer Science student passionate about building clean, functional web experiences. I design in Figma and bring it to life with code.
-      </p>
-      <div class="hero-cta">
-        <a href="#projects" class="btn btn-primary">View My Work</a>
-        <a href="#contact" class="btn btn-ghost">Get In Touch</a>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="code-card">
-        <div class="code-card-header">
-          <span class="dot red"></span>
-          <span class="dot yellow"></span>
-          <span class="dot green"></span>
-          <span class="file-name">sona.js</span>
-        </div>
-        <pre class="code-body"><span class="c-key">const</span> <span class="c-var">developer</span> = {
-  <span class="c-prop">name</span>: <span class="c-str">"Sona Singh BK"</span>,
-  <span class="c-prop">role</span>: <span class="c-str">"Web Developer"</span>,
-  <span class="c-prop">degree</span>: <span class="c-str">"B.Tech CS"</span>,
-  <span class="c-prop">skills</span>: [
-    <span class="c-str">"HTML"</span>, <span class="c-str">"CSS"</span>,
-    <span class="c-str">"JavaScript"</span>, <span class="c-str">"Figma"</span>
-  ],
-  <span class="c-prop">passion</span>: <span class="c-str">"building the web"</span>
-};</pre>
-      </div>
-    </div>
-  </section>
+# -- FUNCTION 1: Weather
+def get_weather(city="Thiruvananthapuram"):
+  """Fetch today's weather as a one-line text summary."""
+  url = f"https://wttr.in/{city}?format=3"
+  try:
+      response = requests. get(url, timeout=10)
+      response.raise_for_status()
+      return response.text.strip()
+  except Exception as e:
+      return f"Weather unavailable ({e})"
 
-  <!-- ── PROJECTS ── -->
-  <section class="section" id="projects">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-eyebrow">What I've built</p>
-        <h2 class="section-title">Projects</h2>
-      </div>
+# -- FUNCTION 2: Quote
+def get_quote():
+   """Fetch a random motivational quote from ZenQuotes."""
+   url = "https://zenquotes.io/api/random"
+   try:
+       response = requests.get(url, timeout=10)
+       response.raise_for_status()
+       data = response.json()
+       quote = data[0][ "q"]
+       author = data[0]["a"]
+       return f'"[quote]" - [author]'
+   except Exception as e:
+        return f"Quote unavailable ({e})"
+# -- FUNCTION 3: Build the summary
+def build_summary(): 
+    """Assemble the full daily summary from all data sources."""
+    today =date.today().strftime("%A,%d %B %Y")
+    weather=get_weather()
+    quote = get_quote()
+   
+    summary= f""" 
+===============================
+   PULSE -Daily Summary
+   {today}
+===============================
+  WEATHER
+   {weather}
 
-      <!-- Filter Buttons -->
-      <div class="filter-bar">
-        <button class="filter-btn active" data-filter="all">All <span class="count" id="count-all"></span></button>
-        <button class="filter-btn" data-filter="design">Design <span class="count" id="count-design"></span></button>
-        <button class="filter-btn" data-filter="web">Web <span class="count" id="count-web"></span></button>
-        <button class="filter-btn" data-filter="code">Code <span class="count" id="count-code"></span></button>
-      </div>
+ TODAY'S QUOTE
+  {quote}
 
-      <div class="projects-grid" id="projectsGrid">
+==============================
+"""
+    return summary
 
-        <!-- Project 1 -->
-        <div class="project-card" data-category="design">
-          <div class="project-tag">Design</div>
-          <div class="project-icon">🎨</div>
-          <h3 class="project-name">TaskMan — Figma Design</h3>
-          <p class="project-desc">A task management app UI designed in Figma. Clean layout, intuitive flow, and a modern design system built from scratch.</p>
-          <div class="project-tech">
-            <span class="tech-chip">Figma</span>
-            <span class="tech-chip">UI/UX</span>
-            <span class="tech-chip">Prototyping</span>
-          </div>
-          <div class="project-links">
-            <a href="https://www.figma.com/design/TzGWOhsbZDElKzTihRXyVi/taskman?node-id=1-3&t=gSdvtDwGQ5jURXAf-1" target="_blank" class="project-link">
-              <i class="fa-brands fa-figma"></i> View Design
-            </a>
-            <a href="https://www.figma.com/proto/TzGWOhsbZDElKzTihRXyVi/taskman?page-id=1%3A3&node-id=8-253&p=f&viewport=12%2C239%2C0.24&t=rxX5wmL4FggUm6LG-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=8%3A253" target="_blank" class="project-link secondary">
-              <i class="fa-solid fa-play"></i> Live Prototype
-            </a>
-          </div>
-        </div>
+#fn 4
 
-        <!-- Project 2 -->
-        <div class="project-card" data-category="web">
-          <div class="project-tag">Web</div>
-          <div class="project-icon">🌐</div>
-          <h3 class="project-name">Portfolio Website</h3>
-          <p class="project-desc">This very portfolio — built with pure HTML, CSS and JavaScript. Features dark/light mode, smooth animations and a filterable project gallery.</p>
-          <div class="project-tech">
-            <span class="tech-chip">HTML</span>
-            <span class="tech-chip">CSS</span>
-            <span class="tech-chip">JavaScript</span>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/zona-afk/green-quest-" target="_blank" class="project-link">
-              <i class="fa-brands fa-github"></i> Source Code
-            </a>
-          </div>
-        </div>
+def run():
+   """Main entry point. Called by GitHub Action."""
+   summary = build_summary()
+   
+   print(summary)
+   
+   with open("daily_summary.txt","w",encoding="utf-8") as f:
+        f.write(summary)
+   print("Pulse ran successfully.")
 
-       
 
-      </div>
-
-      <!-- Project count -->
-      <p class="project-count-display" id="projectCountDisplay"></p>
-
-      <!-- ── FIGMA PROTOTYPE EMBED ── -->
-            <div class="figma-embed-wrapper">
-        <div class="figma-embed-header">
-          <i class="fa-brands fa-figma"></i>
-          <div>
-            <h3>TaskMan — Live Prototype</h3>
-            <p>Click inside to interact with the prototype</p>
-          </div>
-          <a href="https://www.figma.com/proto/TzGWOhsbZDElKzTihRXyVi/taskman?page-id=1%3A3&node-id=8-253&scaling=scale-down&starting-point-node-id=8%3A253" target="_blank" class="project-link" style="margin-left:auto;white-space:nowrap;">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open full
-          </a>
-        </div>
-        <div class="figma-phone-wrap">
-          <div class="figma-phone-frame">
-            <div class="figma-phone-notch"></div>
-            <iframe
-              src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FTzGWOhsbZDElKzTihRXyVi%2Ftaskman%3Fpage-id%3D1%253A3%26node-id%3D8-253%26p%3Df%26viewport%3D12%252C239%252C0.24%26t%3DrxX5wmL4FggUm6LG-1%26scaling%3Dscale-down%26content-scaling%3Dfixed%26starting-point-node-id%3D8%253A253"
-              allowfullscreen
-              loading="lazy"
-              title="TaskMan Figma Prototype">
-            </iframe>
-          </div>
-          <div class="figma-phone-info">
-            <div class="figma-tag"><i class="fa-brands fa-figma"></i> Figma Prototype</div>
-            <h3>TaskMan</h3>
-            <p>A task management app designed entirely in Figma. Features a clean layout, intuitive navigation flow, and a modern design system — all interactive in this live preview.</p>
-            <ul class="figma-details">
-              <li><i class="fa-solid fa-circle-check"></i> Mobile-first UI design</li>
-              <li><i class="fa-solid fa-circle-check"></i> Interactive prototype flow</li>
-              <li><i class="fa-solid fa-circle-check"></i> Custom design system</li>
-            </ul>
-            <a href="https://www.figma.com/design/TzGWOhsbZDElKzTihRXyVi/taskman?node-id=1-3" target="_blank" class="btn btn-primary" style="margin-top:8px;display:inline-flex;">
-              <i class="fa-brands fa-figma"></i> View Full Design
-            </a>
-          </div>
-        </div>
-      </div>
- 
-    </div>
-
-    </div>
-  </section>
-
-  <!-- ── SKILLS ── -->
-  <section class="section section-alt" id="skills">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-eyebrow">What I work with</p>
-        <h2 class="section-title">Skills</h2>
-      </div>
-      <div class="skills-grid">
-
-        <div class="skill-card">
-          <div class="skill-icon">
-            <i class="fa-brands fa-html5"></i>
-          </div>
-          <h4>HTML5</h4>
-          <p>Semantic markup, accessibility, SEO-friendly structure</p>
-          <div class="skill-bar"><div class="skill-fill" style="--w:90%"></div></div>
-        </div>
-
-        <div class="skill-card">
-          <div class="skill-icon">
-            <i class="fa-brands fa-css3-alt"></i>
-          </div>
-          <h4>CSS3</h4>
-          <p>Flexbox, Grid, animations, responsive design</p>
-          <div class="skill-bar"><div class="skill-fill" style="--w:85%"></div></div>
-        </div>
-
-        <div class="skill-card">
-          <div class="skill-icon">
-            <i class="fa-brands fa-js"></i>
-          </div>
-          <h4>JavaScript</h4>
-          <p>DOM manipulation, ES6+, interactive UI logic</p>
-          <div class="skill-bar"><div class="skill-fill" style="--w:80%"></div></div>
-        </div>
-
-        <div class="skill-card">
-          <div class="skill-icon">
-            <i class="fa-brands fa-figma"></i>
-          </div>
-          <h4>Figma</h4>
-          <p>UI/UX design, prototyping, design systems</p>
-          <div class="skill-bar"><div class="skill-fill" style="--w:88%"></div></div>
-        </div>
-
-        <div class="skill-card">
-          <div class="skill-icon">
-            <i class="fa-solid fa-code"></i>
-          </div>
-          <h4>C Programming</h4>
-          <p>Memory management, data structures, algorithms</p>
-          <div class="skill-bar"><div class="skill-fill" style="--w:75%"></div></div>
-        </div>
-
-        <div class="skill-card">
-          <div class="skill-icon">
-            <i class="fa-brands fa-python"></i>
-          </div>
-          <h4>Python</h4>
-          <p>Scripting, automation, problem solving</p>
-          <div class="skill-bar"><div class="skill-fill" style="--w:78%"></div></div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ── BLOG ── -->
-  <section class="section" id="blog">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-eyebrow">Thoughts & learnings</p>
-        <h2 class="section-title">Blog</h2>
-      </div>
-      <div class="blog-grid">
-
-        <article class="blog-card">
-          <div class="blog-meta">
-            <span class="blog-date"><i class="fa-regular fa-calendar"></i> June 2, 2025</span>
-            <span class="blog-tag">CSS</span>
-          </div>
-          <h3 class="blog-title">Why CSS Grid Changed How I Think About Layouts</h3>
-          <p class="blog-excerpt">Grid isn't just a layout tool — it's a completely different mental model. Here's how switching from floats to Grid made my code cleaner and my designs more intentional.</p>
-          <a href="#" class="read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
-        </article>
-
-        <article class="blog-card">
-          <div class="blog-meta">
-            <span class="blog-date"><i class="fa-regular fa-calendar"></i> May 18, 2025</span>
-            <span class="blog-tag">Figma</span>
-          </div>
-          <h3 class="blog-title">From Sketch to Prototype: My Figma Workflow</h3>
-          <p class="blog-excerpt">Designing the TaskMan app taught me that a good prototype isn't about pixel perfection — it's about communicating intent clearly to yourself and anyone who looks at it.</p>
-          <a href="#" class="read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
-        </article>
-
-        <article class="blog-card">
-          <div class="blog-meta">
-            <span class="blog-date"><i class="fa-regular fa-calendar"></i> April 30, 2025</span>
-            <span class="blog-tag">JavaScript</span>
-          </div>
-          <h3 class="blog-title">What I Learned Building My First JavaScript Project</h3>
-          <p class="blog-excerpt">Debugging is 80% of the job. From undefined errors to event listener chaos — here are the lessons that stuck with me from my first real JS project.</p>
-          <a href="#" class="read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ── CONTACT ── -->
-  <section class="section section-alt" id="contact">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-eyebrow">Let's connect</p>
-        <h2 class="section-title">Contact</h2>
-      </div>
-      <div class="contact-wrapper">
-        <div class="contact-info">
-          <p class="contact-intro">
-            I'm currently open to internships, collaborations, and new opportunities. Feel free to reach out!
-          </p>
-          <div class="contact-links">
-            <a href="mailto:sonasingh88276@gmail.com" class="contact-item">
-              <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
-              <div>
-                <span class="contact-label">Email</span>
-                <span class="contact-value">sonasingh88276@gmail.com</span>
-              </div>
-            </a>
-            <a href="https://github.com/zona-afk" target="_blank" class="contact-item">
-              <div class="contact-icon"><i class="fa-brands fa-github"></i></div>
-              <div>
-                <span class="contact-label">GitHub</span>
-                <span class="contact-value">zona-afk</span>
-              </div>
-            </a>
-            <a href="https://www.linkedin.com/in/sona-singh-96238232b/" target="_blank" class="contact-item">
-              <div class="contact-icon"><i class="fa-brands fa-linkedin"></i></div>
-              <div>
-                <span class="contact-label">LinkedIn</span>
-                <span class="contact-value">Sona Singh BK</span>
-              </div>
-            </a>
-           
-          </div>
-        </div>
-
-        <form class="contact-form" id="contactForm">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" placeholder="Your name" required />
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="your@email.com" required />
-          </div>
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" rows="5" placeholder="What's on your mind?" required></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary btn-full">
-            <i class="fa-solid fa-paper-plane"></i> Send Message
-          </button>
-          <p class="form-note" id="formNote"></p>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── FOOTER ── -->
-  <footer class="footer">
-    <div class="container">
-      <p>Designed &amp; built by <span class="highlight">Sona Singh BK</span></p>
-      <p class="footer-sub">B.Tech Computer Science · Web Developer · Figma Enthusiast</p>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
-</body>
-</html>
+if __name__=="__main__":
+    run()
