@@ -190,3 +190,22 @@ const sectionObserver = new IntersectionObserver(entries => {
 }, { rootMargin: '-40% 0px -40% 0px' });
 
 sections.forEach(sec => sectionObserver.observe(sec));
+
+fetch('projects.json')
+  .then(res => res.json())
+  .then(projects => {
+    const container = document.getElementById('projects');
+    if (!container) return;
+
+    projects.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'project-card';
+      card.innerHTML = `
+        <h3><a href="${p.url}" target="_blank">${p.name}</a></h3>
+        <p>${p.description || 'No description provided.'}</p>
+        <span>${p.language} ⭐ ${p.stars}</span>
+      `;
+      container.appendChild(card);
+    });
+  })
+  .catch(err => console.error('Could not load projects:', err));
