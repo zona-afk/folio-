@@ -1,19 +1,19 @@
 [
   {
+    "name": "folio-",
+    "description": "Portfolio using html,css,java",
+    "url": "https://github.com/zona-afk/folio-",
+    "language": "CSS",
+    "stars": 0,
+    "updated_at": "2026-07-02T08:43:09Z"
+  },
+  {
     "name": "py-proj",
     "description": "",
     "url": "https://github.com/zona-afk/py-proj",
     "language": "Python",
     "stars": 0,
     "updated_at": "2026-07-02T06:23:41Z"
-  },
-  {
-    "name": "folio-",
-    "description": "Portfolio using html,css,java",
-    "url": "https://github.com/zona-afk/folio-",
-    "language": "CSS",
-    "stars": 0,
-    "updated_at": "2026-07-02T02:29:01Z"
   },
   {
     "name": "skills-getting-started-with-github-copilot",
